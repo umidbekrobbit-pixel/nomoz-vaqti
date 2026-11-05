@@ -1,0 +1,789 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#103d30">
+<title>Namoz Vaqtlari | Xorazm</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+--green:#103d30;
+--green2:#247454;
+--gold:#e4c779;
+--bg:#f3f7f4;
+--text:#18392e;
+--muted:#84948b;
+}
+
+body{
+font-family:Inter,sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+header{
+background:var(--green);
+color:white;
+padding:20px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.logo{font-size:23px;font-weight:800}
+.logo span{color:var(--gold)}
+
+nav{display:flex;gap:20px}
+nav a{color:white;text-decoration:none;font-size:14px}
+
+.hero{
+background:linear-gradient(135deg,#103d30,#287454);
+color:white;
+text-align:center;
+padding:65px 20px 95px;
+}
+
+.arabic{
+font-family:Amiri,serif;
+font-size:38px;
+color:var(--gold);
+margin-bottom:15px;
+}
+
+.hero h1{font-size:clamp(30px,5vw,48px);margin-bottom:12px}
+.hero p{color:#d5e7dd}
+
+.container{
+max-width:1150px;
+margin:-45px auto 50px;
+padding:0 20px;
+}
+
+.panel{
+background:white;
+padding:28px;
+border-radius:18px;
+box-shadow:0 10px 35px #103d3010;
+}
+
+.controls{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.field input,.field select{
+width:100%;
+height:48px;
+border:1px solid #e5ede7;
+border-radius:10px;
+padding:0 12px;
+background:#f9fbf9;
+outline:none;
+}
+
+.date-buttons{display:flex;gap:6px;margin-top:10px}
+
+.date-buttons button{
+flex:1;
+padding:9px 5px;
+background:white;
+border:1px solid #e5ede7;
+border-radius:8px;
+color:var(--green);
+cursor:pointer;
+font-weight:600;
+font-size:11px;
+}
+
+.date-buttons button:hover{background:var(--green);color:white}
+
+.selected-date{font-size:18px;font-weight:800;padding:12px 0}
+
+.clock-box{
+border-top:1px solid #e5ede7;
+margin-top:22px;
+padding-top:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:12px;
+}
+
+#clock{font-size:30px;font-weight:800;color:var(--green)}
+#dateText{font-size:13px;color:var(--muted);margin-top:5px}
+#status{font-size:13px;color:#268252}
+
+.section-title{font-size:24px;margin:35px 0 20px}
+
+.prayer-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.prayer-card{
+background:white;
+border:1px solid #e5ede7;
+border-radius:16px;
+padding:25px;
+transition:.3s;
+}
+
+.prayer-card:hover{
+transform:translateY(-5px);
+box-shadow:0 12px 25px #103d3015;
+}
+
+.prayer-card.active{background:var(--green);color:white}
+.prayer-icon{font-size:29px;margin-bottom:12px}
+.prayer-name{font-size:18px;font-weight:700}
+.prayer-arabic{font-family:Amiri,serif;font-size:21px;opacity:.7}
+.prayer-time{font-size:32px;font-weight:800;color:var(--green2);margin-top:14px}
+.active .prayer-time{color:var(--gold)}
+.prayer-description{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.5}
+.active .prayer-description{color:#d5e7dd}
+
+.alarm-panel{
+margin-top:35px;
+padding:25px;
+background:linear-gradient(120deg,#eaf5ee,#f7f4e9);
+border-radius:16px;
+}
+
+.alarm-panel h2{margin-bottom:10px}
+.alarm-panel p{font-size:13px;color:#64776d;margin-bottom:15px}
+
+.btn{
+padding:13px 18px;
+border:0;
+border-radius:10px;
+background:var(--green);
+color:white;
+font-weight:700;
+cursor:pointer;
+margin:4px;
+}
+
+.btn.gold{background:var(--gold);color:var(--green)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.search-section input{
+width:100%;
+padding:16px;
+border:1px solid #e5ede7;
+border-radius:10px;
+font-size:15px;
+outline:none;
+}
+
+.search-result{
+display:none;
+background:#eaf5ee;
+padding:20px;
+margin-top:15px;
+border-radius:12px;
+}
+
+.search-result strong{
+display:block;
+font-size:30px;
+color:var(--green);
+margin-top:10px;
+}
+
+.info{
+background:white;
+padding:25px;
+border-radius:16px;
+margin-top:35px;
+line-height:2;
+}
+
+footer{
+background:var(--green);
+color:white;
+text-align:center;
+padding:28px;
+font-size:13px;
+line-height:2;
+}
+
+@media(max-width:750px){
+header{justify-content:center}
+.controls{grid-template-columns:1fr}
+.prayer-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:450px){
+.prayer-grid{grid-template-columns:1fr}
+.panel{padding:18px}
+.clock-box{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">☪ NAMOZ <span>VAQTLARI</span></div>
+<nav>
+<a href="#">Bosh sahifa</a>
+<a href="#vaqtlar">Vaqtlar</a>
+<a href="#alarm">Signal</a>
+<a href="#malumot">Ma'lumot</a>
+</nav>
+</header>
+
+<section class="hero">
+<div class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+<h1>Namoz vaqtlari</h1>
+<p>Urganch va Xiva shaharlari uchun kunlik namoz jadvali</p>
+</section>
+
+<main class="container">
+
+<section class="panel">
+
+<div class="controls">
+
+<div class="field">
+<label>📍 Shaharni tanlang</label>
+<select id="city">
+<option value="urganch">Urganch</option>
+<option value="xiva">Xiva</option>
+</select>
+</div>
+
+<div class="field">
+<label>📅 Sanani tanlang</label>
+<input type="date" id="selectedDate">
+<div class="date-buttons">
+<button onclick="changeDate(-1)">← Kecha</button>
+<button onclick="setToday()">Bugun</button>
+<button onclick="changeDate(1)">Ertaga →</button>
+</div>
+</div>
+
+<div class="field">
+<label>🗓 Tanlangan sana</label>
+<div class="selected-date" id="selectedDateText"></div>
+</div>
+
+</div>
+
+<div class="clock-box">
+<div>
+<div id="clock">00:00:00</div>
+<div id="dateText">O'zbekiston vaqti</div>
+</div>
+<div id="status">Vaqtlar yuklanmoqda...</div>
+</div>
+
+</section>
+
+<h2 class="section-title" id="vaqtlar">Bugungi namoz vaqtlari</h2>
+
+<section class="prayer-grid" id="prayerGrid">
+<p>Vaqtlar yuklanmoqda...</p>
+</section>
+
+<section class="alarm-panel" id="alarm">
+<h2>🕌 Namoz signali</h2>
+<p id="alarmStatus">Signal o'chirilgan. Faqat telefonda ishlaydi.</p>
+
+<button class="btn" id="alarmButton" onclick="toggleAlarm()">
+🔔 Signalni yoqish
+</button>
+
+<button class="btn gold" id="testButton" onclick="testAlarm()">
+▶ Ovozni tekshirish
+</button>
+</section>
+
+<section class="search-section">
+<h2 class="section-title">🔍 Namoz nomini qidirish</h2>
+
+<input id="search" type="text"
+placeholder="Bomdod, Peshin, Asr, Shom, Xufton...">
+
+<div class="search-result" id="searchResult">
+<h3 id="resultName"></h3>
+<p id="resultDescription"></p>
+<strong id="resultTime"></strong>
+</div>
+</section>
+
+<section class="info" id="malumot">
+<h2>Namoz haqida ma'lumot</h2>
+<p><b>Bomdod:</b> Tong otishidan quyosh chiqishigacha.</p>
+<p><b>Peshin:</b> Quyosh zavolidan keyin.</p>
+<p><b>Asr:</b> Kunning ikkinchi yarmida.</p>
+<p><b>Shom:</b> Quyosh botgandan keyin.</p>
+<p><b>Xufton:</b> Shafaq yo'qolgandan keyin.</p>
+<p><b>Quyosh:</b> Quyosh chiqish vaqti, namoz emas.</p>
+</section>
+
+</main>
+
+<footer>
+<p>© 2026 NAMOZ VAQTLARI</p>
+<p>Urganch | Xiva | Xorazm</p>
+<p>Alloh ibodatlaringizni qabul qilsin!</p>
+</footer>
+
+<script>
+
+// SHAHARLAR
+
+const cities={
+urganch:{name:"Urganch",lat:41.55,lon:60.63},
+xiva:{name:"Xiva",lat:41.38,lon:60.36}
+};
+
+// NAMOZLAR
+
+const prayers=[
+{key:"Fajr",name:"Bomdod",arabic:"الفجر",icon:"🌅",description:"Tong otishidan quyosh chiqishigacha."},
+{key:"Sunrise",name:"Quyosh",arabic:"الشروق",icon:"☀️",description:"Quyosh chiqish vaqti."},
+{key:"Dhuhr",name:"Peshin",arabic:"الظهر",icon:"🌤️",description:"Quyosh zavolidan keyin."},
+{key:"Asr",name:"Asr",arabic:"العصر",icon:"🌇",description:"Kunning ikkinchi yarmida."},
+{key:"Maghrib",name:"Shom",arabic:"المغرب",icon:"🌆",description:"Quyosh botgandan keyin."},
+{key:"Isha",name:"Xufton",arabic:"العشاء",icon:"🌙",description:"Kechki namoz vaqti."}
+];
+
+let prayerData=[];
+let alarmEnabled=false;
+let audioContext=null;
+let triggeredAlarms=new Set();
+
+const dateInput=document.getElementById("selectedDate");
+
+// TELEFONNI ANIQLASH
+
+function isPhone(){
+return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+// BUGUNGI SANA
+
+function getToday(){
+const parts=new Intl.DateTimeFormat("en-CA",{
+timeZone:"Asia/Tashkent",
+year:"numeric",
+month:"2-digit",
+day:"2-digit"
+}).formatToParts(new Date());
+
+const obj={};
+parts.forEach(p=>obj[p.type]=p.value);
+
+return `${obj.year}-${obj.month}-${obj.day}`;
+}
+
+dateInput.value=getToday();
+
+// API SANASI
+
+function formatApiDate(date){
+const [year,month,day]=date.split("-");
+return `${day}-${month}-${year}`;
+}
+
+// KALENDAR
+
+function changeDate(days){
+const d=new Date(dateInput.value+"T12:00:00");
+d.setDate(d.getDate()+days);
+
+const y=d.getFullYear();
+const m=String(d.getMonth()+1).padStart(2,"0");
+const day=String(d.getDate()).padStart(2,"0");
+
+dateInput.value=`${y}-${m}-${day}`;
+loadPrayerTimes();
+}
+
+function setToday(){
+dateInput.value=getToday();
+loadPrayerTimes();
+}
+
+// SOAT
+
+function updateClock(){
+const now=new Date();
+
+document.getElementById("clock").textContent=
+new Intl.DateTimeFormat("uz-UZ",{
+timeZone:"Asia/Tashkent",
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:false
+}).format(now);
+
+document.getElementById("dateText").textContent=
+new Intl.DateTimeFormat("uz-UZ",{
+timeZone:"Asia/Tashkent",
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}).format(now);
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+// SANA KO'RSATISH
+
+function showSelectedDate(){
+const d=new Date(dateInput.value+"T12:00:00");
+
+const formatted=new Intl.DateTimeFormat("uz-UZ",{
+day:"numeric",
+month:"long",
+year:"numeric"
+}).format(d);
+
+document.getElementById("selectedDateText").textContent=formatted;
+document.getElementById("vaqtlar").textContent="Namoz vaqtlari — "+formatted;
+}
+
+// VAQTLARNI YUKLASH
+
+async function loadPrayerTimes(){
+const city=cities[document.getElementById("city").value];
+const selected=dateInput.value;
+
+if(!selected)return;
+
+showSelectedDate();
+
+document.getElementById("status").textContent="⏳ Yuklanmoqda...";
+document.getElementById("prayerGrid").innerHTML="<p>Vaqtlar yuklanmoqda...</p>";
+document.getElementById("searchResult").style.display="none";
+
+try{
+const url=`https://api.aladhan.com/v1/timings/${formatApiDate(selected)}?latitude=${city.lat}&longitude=${city.lon}&method=1&school=1`;
+
+const response=await fetch(url);
+
+if(!response.ok)throw new Error("Server xatosi");
+
+const result=await response.json();
+
+if(result.code!==200)throw new Error("API xatosi");
+
+const timings=result.data.timings;
+
+prayerData=prayers.map(p=>({
+...p,
+time:timings[p.key].split(" ")[0]
+}));
+
+renderPrayers();
+
+document.getElementById("status").textContent=
+"✓ "+city.name+" uchun vaqtlar yuklandi";
+
+}catch(error){
+document.getElementById("prayerGrid").innerHTML=
+"<p style='color:red'>Vaqtlarni olishda xatolik. Internetni tekshiring.</p>";
+
+document.getElementById("status").textContent="⚠ Yuklashda xatolik";
+console.error(error);
+}
+}
+
+// NAMOZ KARTALARI
+
+function renderPrayers(){
+const grid=document.getElementById("prayerGrid");
+grid.innerHTML="";
+
+const isToday=dateInput.value===getToday();
+
+const currentTime=new Intl.DateTimeFormat("en-GB",{
+timeZone:"Asia/Tashkent",
+hour:"2-digit",
+minute:"2-digit",
+hour12:false
+}).format(new Date());
+
+let nextPrayer=-1;
+
+if(isToday){
+nextPrayer=prayerData.findIndex(p=>
+p.name!=="Quyosh" && p.time>currentTime
+);
+}
+
+prayerData.forEach((p,index)=>{
+const card=document.createElement("div");
+
+card.className="prayer-card"+(index===nextPrayer?" active":"");
+
+const icon=document.createElement("div");
+icon.className="prayer-icon";
+icon.textContent=p.icon;
+
+const name=document.createElement("div");
+name.className="prayer-name";
+name.textContent=p.name;
+
+const arabic=document.createElement("div");
+arabic.className="prayer-arabic";
+arabic.textContent=p.arabic;
+
+const time=document.createElement("div");
+time.className="prayer-time";
+time.textContent=p.time;
+
+const desc=document.createElement("div");
+desc.className="prayer-description";
+desc.textContent=index===nextPrayer?"Keyingi namoz vaqti":p.description;
+
+card.append(icon,name,arabic,time,desc);
+grid.appendChild(card);
+});
+}
+
+// QIDIRISH
+
+function searchPrayer(){
+const query=document.getElementById("search").value.trim().toLowerCase();
+const result=document.getElementById("searchResult");
+
+if(!query){
+result.style.display="none";
+return;
+}
+
+const found=prayerData.find(p=>
+p.name.toLowerCase().includes(query)||
+p.key.toLowerCase().includes(query)||
+p.arabic.includes(query)
+);
+
+result.style.display="block";
+
+if(found){
+document.getElementById("resultName").textContent=found.icon+" "+found.name;
+document.getElementById("resultDescription").textContent=found.description;
+document.getElementById("resultTime").textContent=found.time;
+}else{
+document.getElementById("resultName").textContent="Namoz topilmadi";
+document.getElementById("resultDescription").textContent="Namoz nomini to'g'ri yozing.";
+document.getElementById("resultTime").textContent="";
+}
+}
+
+// SIGNAL FAQAT TELEFONDA
+
+async function toggleAlarm(){
+
+if(!isPhone()){
+document.getElementById("alarmStatus").textContent=
+"Signal faqat telefonda ishlaydi.";
+return;
+}
+
+if(!alarmEnabled){
+
+try{
+const AudioClass=window.AudioContext||window.webkitAudioContext;
+
+if(!AudioClass)throw new Error("Audio mavjud emas");
+
+if(!audioContext)audioContext=new AudioClass();
+
+await audioContext.resume();
+
+if("Notification" in window&&Notification.permission==="default"){
+await Notification.requestPermission();
+}
+
+alarmEnabled=true;
+
+document.getElementById("alarmButton").textContent="🔕 Signalni o'chirish";
+document.getElementById("alarmStatus").textContent="🟢 Faqat 5 vaqt namoz uchun signal yoqildi.";
+
+}catch(error){
+document.getElementById("alarmStatus").textContent="Ovozga ruxsat berilmadi.";
+}
+
+}else{
+
+alarmEnabled=false;
+
+document.getElementById("alarmButton").textContent="🔔 Signalni yoqish";
+document.getElementById("alarmStatus").textContent="Signal o'chirildi.";
+
+if("speechSynthesis" in window){
+speechSynthesis.cancel();
+}
+}
+}
+
+// SIGNAL OVOZI
+
+function playBeep(){
+if(!audioContext||!isPhone())return;
+
+[660,880,660].forEach((frequency,index)=>{
+const oscillator=audioContext.createOscillator();
+const gain=audioContext.createGain();
+
+oscillator.type="sine";
+oscillator.frequency.value=frequency;
+
+oscillator.connect(gain);
+gain.connect(audioContext.destination);
+
+const start=audioContext.currentTime+index*0.4;
+
+gain.gain.setValueAtTime(0.0001,start);
+gain.gain.exponentialRampToValueAtTime(0.3,start+0.05);
+gain.gain.exponentialRampToValueAtTime(0.0001,start+0.3);
+
+oscillator.start(start);
+oscillator.stop(start+0.32);
+});
+}
+
+// OVOZLI CHAQIRUV
+
+function speakPrayer(name){
+if(!isPhone()||!("speechSynthesis" in window))return;
+
+speechSynthesis.cancel();
+
+const message=new SpeechSynthesisUtterance(
+name+" namozi vaqti keldi. Namoz vaqti keldi."
+);
+
+message.lang="uz-UZ";
+message.rate=0.85;
+message.volume=1;
+
+speechSynthesis.speak(message);
+}
+
+// TELEFON BILDIRISHNOMASI
+
+function showPrayerNotification(name){
+if(!isPhone())return;
+
+if("Notification" in window&&Notification.permission==="granted"){
+new Notification("🕌 Namoz vaqti keldi!",{
+body:name+" namozi vaqti keldi.",
+tag:"namoz-"+name
+});
+}
+}
+
+// FAQAT 5 VAQTDA SIGNAL
+
+function checkPrayerAlarm(){
+
+if(!isPhone())return;
+if(!alarmEnabled||prayerData.length===0)return;
+if(dateInput.value!==getToday())return;
+
+const currentTime=new Intl.DateTimeFormat("en-GB",{
+timeZone:"Asia/Tashkent",
+hour:"2-digit",
+minute:"2-digit",
+hour12:false
+}).format(new Date());
+
+const fivePrayers=["Bomdod","Peshin","Asr","Shom","Xufton"];
+
+prayerData.forEach(p=>{
+
+if(!fivePrayers.includes(p.name))return;
+if(p.time!==currentTime)return;
+
+const alarmId=getToday()+"-"+
+document.getElementById("city").value+"-"+p.name;
+
+if(triggeredAlarms.has(alarmId))return;
+
+triggeredAlarms.add(alarmId);
+
+playBeep();
+speakPrayer(p.name);
+showPrayerNotification(p.name);
+
+document.getElementById("alarmStatus").textContent=
+"🕌 "+p.name+" namozi vaqti keldi!";
+});
+}
+
+setInterval(checkPrayerAlarm,5000);
+
+// OVOZNI TEKSHIRISH
+
+function testAlarm(){
+
+if(!isPhone()){
+alert("Signal faqat telefonda ishlaydi.");
+return;
+}
+
+if(!alarmEnabled||!audioContext){
+alert("Avval signalni yoqing!");
+return;
+}
+
+playBeep();
+
+setTimeout(()=>speakPrayer("Bomdod"),1500);
+}
+
+// HODISALAR
+
+dateInput.addEventListener("change",loadPrayerTimes);
+
+document.getElementById("city")
+.addEventListener("change",loadPrayerTimes);
+
+document.getElementById("search")
+.addEventListener("input",searchPrayer);
+
+// KOMPYUTERDA SIGNAL TUGMALARI O'CHIQ
+
+if(!isPhone()){
+document.getElementById("alarmStatus").textContent=
+"💻 Signal faqat telefonda ishlaydi.";
+
+document.getElementById("alarmButton").disabled=true;
+document.getElementById("testButton").disabled=true;
+}
+
+// ISHGA TUSHIRISH
+
+loadPrayerTimes();
+
+</script>
+
+</body>
+</html>
